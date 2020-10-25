@@ -75,7 +75,7 @@ router.get('/profile', function (req, res, next) {
   }
 });
 
-router.get('/profile/:id', auth.verifyUser, function(req, res, next) {
+router.get('/profile/:id', authService.verifyUser, function(req, res, next) {
   // if (!req.isAuthenticated()) {
   //   return res.send('You are not authenticated');
   // }
