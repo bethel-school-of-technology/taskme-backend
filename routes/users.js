@@ -89,7 +89,7 @@ router.get('/profile/:id', authService.verifyUser, function(req, res, next) {
       status = 'Normal user';
     }
 
-    res.render('profile', {
+    res.json({
       FirstName: req.user.FirstName,
       LastName: req.user.LastName,
       Email: req.user.Email,
