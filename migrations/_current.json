@@ -1,5 +1,61 @@
 {
     "tables": {
+        "lists": {
+            "tableName": "lists",
+            "schema": {
+                "ListId": {
+                    "allowNull": false,
+                    "autoIncrement": true,
+                    "primaryKey": true,
+                    "field": "ListId",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "ListName": {
+                    "field": "ListName",
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "tasks": {
+            "tableName": "tasks",
+            "schema": {
+                "TaskId": {
+                    "allowNull": false,
+                    "autoIncrement": true,
+                    "primaryKey": true,
+                    "field": "TaskId",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "TaskName": {
+                    "field": "TaskName",
+                    "seqType": "Sequelize.STRING"
+                },
+                "Completed": {
+                    "field": "Completed",
+                    "seqType": "Sequelize.BOOLEAN"
+                },
+                "createdAt": {
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
         "users": {
             "tableName": "users",
             "schema": {
@@ -60,5 +116,5 @@
             "indexes": []
         }
     },
-    "revision": 1
+    "revision": 3
 }
