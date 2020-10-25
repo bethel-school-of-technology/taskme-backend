@@ -23,7 +23,9 @@ var authService = {
             return models.users.findByPk(decoded.UserId); //<--- Return result of database query as promise
         } catch (err) {
             console.log(err);
-            return null;
+            return new Promise((resolve, reject) => {
+              resolve(null);
+            });
         }
     },
     hashPassword: function (plainTextPassword) {
