@@ -4,14 +4,33 @@ var models = require("../models");
 
 /* GET tasks. WIP */
 router.get("/", (req, res, next) => {
-    models.tasks
+  models.tasks
     .findAll({
-        attributes: ['TaskId', 'TaskName']
+      attributes: ["TaskId", "TaskName"],
     })
-    .then(tasksFound => {
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(tasksFound));
+    .then((tasksFound) => {
+      res.setHeader("Content-Type", "application/json");
+      res.send(JSON.stringify(tasksFound));
     });
-  });
+});
 
-  module.exports = router;
+/* GET task by ID */
+router.get("/:id", (req, res) => {
+    models.tasks
+    .findOne({
+      where: {
+        id: parseInt(req.params.id)
+        // ownedBy: user.id,
+      },
+    })
+    .catch(err => {
+        res.status(400);
+        res.send("No task with that id");
+    })
+    .then((taskFound) => {
+      res.json({ task: taskFound });
+      res.status(200);
+    });
+});
+
+module.exports = router;
