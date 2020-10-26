@@ -3,10 +3,24 @@ var router = express.Router();
 var models = require("../models");
 var authService = require("../services/auth");
 
-/* GET users listing. */
-router.get("/", (req, res, next) => {
-  res.json({message: "respond with a resource"});
+router.post("/token", function (req, res, next) {
+  let token = req.cookies.token;
+
+  if (!token) {
+    res.json({ user: null, token: null });
+    return;
+  }
+  authService.verifyUser(token).then((user) => {
+    if (!user) {
+      res.json({ user: null, token: null });
+    }
+
+    let token = authService.signUser(user);
+    res.cookie("token", token, { httpOnly: true });
+    res.json({ user, token });
+  });
 });
+
 
 // Create new user if one doesn't exist
 router.post("/signup", (req, res, next) => {
@@ -53,6 +67,7 @@ router.post("/login", (req, res, next) => {
         if (passwordMatch) {
           let token = authService.signUser(user);
           res.cookie("jwt", token, { httpOnly: true });
+          res.send("Logged In")
           res.json({ user, token });
         } else {
           res.json({
