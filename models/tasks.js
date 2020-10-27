@@ -9,10 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // tasks.belongsTo(models.users, {
-      //   foreignKey: "ownedBy",
-      //   as: "user",
-      // });
+      tasks.belongsTo(models.users, {
+        foreignKey: "ownedBy",
+        as: "user",
+      });
     }
   }
   tasks.init(
