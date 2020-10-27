@@ -12,7 +12,7 @@ var listsRouter = require('./routes/lists');
 
 var app = express();
 
-app.use(cors());
+app.use(cors({ origin: ["http://localhost:3000"], credentials: true }));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -25,7 +25,7 @@ app.use('/tasks', tasksRouter);
 app.use('/lists', listsRouter);
 
 models.sequelize.sync().then(function () {
-    console.log("DB Sync'd up")
+    console.log("DB Sync'd")
 });
 
 module.exports = app;
