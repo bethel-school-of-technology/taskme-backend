@@ -4,6 +4,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var models = require('./models');
 var cors = require('cors');
+var bodyParser = require("body-parser");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -13,6 +14,8 @@ var listsRouter = require('./routes/lists');
 var app = express();
 
 app.use(cors({ origin: ["http://localhost:5000"], credentials: true }));
+app.use(bodyParser.json());
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

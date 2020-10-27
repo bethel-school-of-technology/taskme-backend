@@ -21,33 +21,30 @@ router.post("/token", function (req, res, next) {
   });
 });
 
-
 // Create new user if one doesn't exist
 router.post("/signup", (req, res, next) => {
   models.users
     .findOrCreate({
       where: {
-        Username: req.body.username,
+        email: req.body.email,
       },
       defaults: {
-        FirstName: req.body.firstName,
-        LastName: req.body.lastName,
-        Email: req.body.email,
-        Password: authService.hashPassword(req.body.password),
+        username: req.body.username,
+        password: authService.hashPassword(req.body.password),
       },
     })
     .spread(function (result, created) {
       if (created) {
-      res.json({ message: "User successfully created"});
+        res.json({ message: "User successfully created" });
       } else {
-        res.json({ message: "This user already exists"});
+        res.json({ message: "This user already exists" });
       }
     });
 });
 
 // Login user and return JWT as cookie
 router.post("/login", (req, res, next) => {
-  console.log(req.body)
+  console.log(req.body);
   models.users
     .findOne({
       where: {
@@ -68,7 +65,7 @@ router.post("/login", (req, res, next) => {
         if (passwordMatch) {
           let token = authService.signUser(user);
           res.cookie("jwt", token, { httpOnly: true });
-          res.send("Logged In")
+          res.send("Logged In");
           res.json({ user, token });
         } else {
           res.json({
@@ -101,7 +98,7 @@ router.get("/profile/:id", authService.verifyUser, (req, res, next) => {
   //   return res.send('You are not authenticated');
   // }
   if (req.params.id !== String(req.user.UserId)) {
-    res.json({ message: "This is not your profile"});
+    res.json({ message: "This is not your profile" });
   } else {
     let status;
     if (req.user.Admin) {
