@@ -47,10 +47,11 @@ router.post("/signup", (req, res, next) => {
 
 // Login user and return JWT as cookie
 router.post("/login", (req, res, next) => {
+  console.log(req.body)
   models.users
     .findOne({
       where: {
-        Username: req.body.username,
+        email: req.body.email,
       },
     })
     .then((user) => {

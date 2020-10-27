@@ -12,7 +12,7 @@ var listsRouter = require('./routes/lists');
 
 var app = express();
 
-app.use(cors({ origin: ["http://localhost:3000"], credentials: true }));
+app.use(cors({ origin: ["http://localhost:5000"], credentials: true }));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
