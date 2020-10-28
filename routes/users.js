@@ -22,24 +22,26 @@ router.post("/token", function (req, res, next) {
 });
 
 // Create new user if one doesn't exist
-router.post("/signup", (req, res, next) => {
-  models.users
-    .findOrCreate({
-      where: {
-        Email: req.body.email,
-      },
-      defaults: {
-        Username: req.body.username,
-        Password: authService.hashPassword(req.body.password),
-      },
-    })
-    .spread((result, created) => {
-      if (created) {
-        res.json({ message: "User successfully created" });
-      } else {
-        res.json({ message: "This user already exists" });
-      }
-    });
+router.post("/signup", async (req, res, next) => {
+  console.log(req.body);
+  const [result, created] = await models.users.findOrCreate({
+    where: {
+      Email: req.body.email,
+    },
+    defaults: {
+      Username: req.body.username,
+      Password: authService.hashPassword(req.body.password),
+      FirstName: req.body.lastName,
+      LastName: req.body.firstName,
+    },
+  });
+  // console.log(result); 
+  console.log(created); 
+  if (created) {
+    res.json({ message: "User successfully created", created });
+  } else {
+    res.json({ message: "This user already exists" });
+  }
 });
 
 // Login user and return JWT as cookie
@@ -55,7 +57,7 @@ router.post("/login", (req, res, next) => {
       console.log(user);
       if (!user) {
         console.log("User not found");
-        return res.json({
+        return res.status(400).json({
           message: "Login failed, did not match any records.",
         });
       } else {
@@ -65,12 +67,10 @@ router.post("/login", (req, res, next) => {
         );
         if (passwordMatch) {
           let token = authService.signUser(user);
-          res.status(200);
           res.cookie("token", token, { httpOnly: true });
-          res.json({ user, token });
-          res.send("Logged In");
+          res.status(200).json({ user, token, message: "Logged In" });
         } else {
-          res.json({
+          res.status(400).json({
             message: "Email and Password did not match any records.",
           });
         }
