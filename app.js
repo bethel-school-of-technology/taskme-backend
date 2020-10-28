@@ -5,6 +5,7 @@ var logger = require('morgan');
 var models = require('./models');
 var cors = require('cors');
 var bodyParser = require("body-parser");
+var Promise = require("bluebird");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');

@@ -26,14 +26,14 @@ router.post("/signup", (req, res, next) => {
   models.users
     .findOrCreate({
       where: {
-        email: req.body.email,
+        Email: req.body.email,
       },
       defaults: {
-        username: req.body.username,
-        password: authService.hashPassword(req.body.password),
+        Username: req.body.username,
+        Password: authService.hashPassword(req.body.password),
       },
     })
-    .spread(function (result, created) {
+    .spread((result, created) => {
       if (created) {
         res.json({ message: "User successfully created" });
       } else {
@@ -48,13 +48,14 @@ router.post("/login", (req, res, next) => {
   models.users
     .findOne({
       where: {
-        email: req.body.email,
+        Email: req.body.email,
       },
     })
     .then((user) => {
+      console.log(user);
       if (!user) {
         console.log("User not found");
-        return res.status(401).json({
+        return res.json({
           message: "Login failed, did not match any records.",
         });
       } else {
@@ -64,9 +65,10 @@ router.post("/login", (req, res, next) => {
         );
         if (passwordMatch) {
           let token = authService.signUser(user);
-          res.cookie("jwt", token, { httpOnly: true });
-          res.send("Logged In");
+          res.status(200);
+          res.cookie("token", token, { httpOnly: true });
           res.json({ user, token });
+          res.send("Logged In");
         } else {
           res.json({
             message: "Email and Password did not match any records.",
@@ -119,7 +121,7 @@ router.get("/profile/:id", authService.verifyUser, (req, res, next) => {
 });
 
 router.get("/logout", (req, res, next) => {
-  res.cookie("jwt", "", { expires: new Date(0) });
+  res.cookie("token", "", { expires: new Date(0) });
   res.json({ message: "Logged out" });
 });
 
