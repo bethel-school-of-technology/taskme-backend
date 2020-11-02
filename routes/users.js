@@ -30,8 +30,8 @@ router.post("/signup", async (req, res, next) => {
     defaults: {
       Username: req.body.username,
       Password: authService.hashPassword(req.body.password),
-      FirstName: req.body.lastName,
-      LastName: req.body.firstName,
+      FirstName: req.body.firstName,
+      LastName: req.body.lastName,
     },
   });
   // console.log(result);
