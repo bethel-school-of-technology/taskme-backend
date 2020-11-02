@@ -6,7 +6,7 @@ var models = require("../models");
 router.get("/", (req, res, next) => {
   models.tasks
     .findAll({
-      attributes: ["TaskId", "TaskName"],
+      attributes: ["TaskId", "TaskName", "Completed"],
     })
     .then((tasksFound) => {
       res.setHeader("Content-Type", "application/json");
