@@ -33,4 +33,17 @@ router.get("/:id", (req, res) => {
     });
 });
 
+/* create a list */
+router.post("/create", function (req, res) {
+  models.lists.create(req.body)
+  .then(newList => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(newList))
+  })
+  .catch(err => {
+    res.status(400);
+    res.send("That list already exists!");
+  });
+});
+
 module.exports = router;
