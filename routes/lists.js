@@ -15,11 +15,11 @@ router.get("/", (req, res, next) => {
 });
 
 /* Find list by ID */
-router.get("/:id", (req, res) => {
+router.get("/lists/:id", (req, res) => {
   models.lists
     .findOne({
       where: {
-        id: parseInt(req.params.id),
+        listId: parseInt(req.params.id),
         // ownedBy: user.id,
       },
     })
