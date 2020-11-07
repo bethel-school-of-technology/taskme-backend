@@ -28,8 +28,7 @@ router.get("/:id", (req, res) => {
         res.send("No task with that id");
     })
     .then((taskFound) => {
-      res.json({ task: taskFound });
-      res.status(200);
+      res.json({ task: taskFound, status: 200 });
     });
 });
 
