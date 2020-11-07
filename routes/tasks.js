@@ -2,69 +2,93 @@ var express = require("express");
 var router = express.Router();
 var models = require("../models");
 
-/* GET tasks. WIP */
+/* GET tasks */
 router.get("/", (req, res, next) => {
-  models.tasks
-    .findAll({
-      attributes: ["TaskId", "TaskName", "Completed"],
-    })
-    .then((tasksFound) => {
-      res.setHeader("Content-Type", "application/json");
-      res.send(JSON.stringify(tasksFound));
-    });
+  let token = req.cookies.token;
+  authService.verifyUser(token).then((user) => {
+    if (!user) {
+      return res.json({ message: "Not logged in." });
+    }
+    models.tasks
+      .findAll({
+        where: { ownedBy: user.UserId },
+        attributes: ["TaskId", "TaskName", "Completed"],
+      })
+      .then((tasksFound) => {
+        res.setHeader("Content-Type", "application/json");
+        res.send(JSON.stringify(tasksFound));
+      });
+  });
 });
 
 /* GET task by ID */
 router.get("/:id", (req, res) => {
+  let token = req.cookies.token;
+  authService.verifyUser(token).then((user) => {
+    if (!user) {
+      return res.json({ message: "Not logged in." });
+    }
     models.tasks
-    .findOne({
-      where: {
-        TaskId: parseInt(req.params.id)
-        // ownedBy: user.id,
-      },
-    })
-    .catch(err => {
-        res.status(400);
-        res.send("No task with that id");
-    })
-    .then((taskFound) => {
-      res.json({ task: taskFound, status: 200 });
-    });
+      .findOne({
+        where: {
+          TaskId: parseInt(req.params.id),
+          ownedBy: user.UserId,
+        },
+      })
+      .catch((err) => {
+        res.json({ message: "No task with that id.", status: 200 });
+      })
+      .then((taskFound) => {
+        res.json({ task: taskFound, status: 200 });
+      });
+  });
 });
 
 /* Update task by id.*/
 router.put("/:id", (req, res) => {
+  let token = req.cookies.token;
+  authService.verifyUser(token).then((user) => {
+    if (!user) {
+      return res.json({ message: "Not logged in." });
+    }
     models.tasks
       .update(req.body, {
         where: {
-          TaskId: parseInt(req.params.id)
-        }
+          TaskId: parseInt(req.params.id),
+          ownedBy: user.UserId,
+        },
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(400);
-        res.send("There was a problem updating the task");
+        res.json({ message: "There was a problem editing the task!" });
       })
       .then((taskFound) => {
         res.json({ task: taskFound });
         res.status(200);
-      })
+      });
+  });
 });
 
 /* Delete task by id.*/
 router.delete("/:id", (req, res) => {
+  let token = req.cookies.token;
+  authService.verifyUser(token).then((user) => {
+    if (!user) {
+      return res.json({ message: "Not logged in." });
+    }
     models.tasks
       .destroy({
         where: {
-          TaskId: parseInt(req.params.id)
-        }
+          TaskId: parseInt(req.params.id),
+          ownedBy: user.UserId,
+        },
       })
-      .then(result => 
-        res.redirect('/tasks')
-      )
-      .catch(err => {
-        res.status(400)
-        res.send("There was a problem deleting the task")
-      })
+      .then((result) => res.redirect("/tasks"))
+      .catch((err) => {
+        res.status(400);
+        res.json({ message: "There was a problem deleting the task!" });
+      });
+  });
 });
 
 module.exports = router;
