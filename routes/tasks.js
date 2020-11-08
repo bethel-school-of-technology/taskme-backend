@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var models = require("../models");
-
+var authService = require('../services/auth');
 /* GET tasks. WIP */
 router.get("/", (req, res, next) => {
   models.tasks
@@ -31,6 +31,23 @@ router.get("/:id", (req, res) => {
       res.json({ task: taskFound });
       res.status(200);
     });
+});
+
+/* Post new task */
+router.post ('/add', (req, res) =>{
+  let token =req.cookies.token;
+  authService.verifyUser(token).then(user => {
+    if(user == null){
+      return res.json({message: "User not logged on."})
+    }
+    models.taks.create({...req.body, ownedBy: user.id}).then(newTask =>{
+      res.json({task: newTask});
+
+    }).catch(err => {
+      res.status(400);
+      res.send(err.message);
+    });
+  });
 });
 
 /* Update task by id.*/
