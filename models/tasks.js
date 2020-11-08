@@ -27,6 +27,13 @@ module.exports = (sequelize, DataTypes) => {
       Completed: DataTypes.BOOLEAN,
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
+      ownedBy: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: users,
+          key: "UserId",
+        },
+      },
     },
     {
       sequelize,
