@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var models = require("../models");
+const authService = require("../services/auth");
 
 /* GET lists. WIP */
 router.get("/", (req, res, next) => {
@@ -32,5 +33,6 @@ router.get("/:id", (req, res) => {
       res.status(200);
     });
 });
+
 
 module.exports = router;
