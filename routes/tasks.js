@@ -6,7 +6,7 @@ var authService = require('../services/auth');
 router.get("/", (req, res, next) => {
   models.tasks
     .findAll({
-      attributes: ["TaskId", "TaskName"],
+      attributes: ["TaskId", "TaskName", "Completed"],
     })
     .then((tasksFound) => {
       res.setHeader("Content-Type", "application/json");
@@ -19,7 +19,7 @@ router.get("/:id", (req, res) => {
     models.tasks
     .findOne({
       where: {
-        id: parseInt(req.params.id)
+        TaskId: parseInt(req.params.id)
         // ownedBy: user.id,
       },
     })
@@ -33,6 +33,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
+/* Post new task */
 router.post ('/add', (req, res) =>{
   let token =req.cookies.token;
   authService.verifyUser(token).then(user => {
@@ -48,4 +49,40 @@ router.post ('/add', (req, res) =>{
     });
   });
 });
+
+/* Update task by id.*/
+router.put("/:id", (req, res) => {
+    models.tasks
+      .update(req.body, {
+        where: {
+          TaskId: parseInt(req.params.id)
+        }
+      })
+      .catch(err => {
+        res.status(400);
+        res.send("There was a problem updating the task");
+      })
+      .then((taskFound) => {
+        res.json({ task: taskFound });
+        res.status(200);
+      })
+});
+
+/* Delete task by id.*/
+router.delete("/:id", (req, res) => {
+    models.tasks
+      .destroy({
+        where: {
+          TaskId: parseInt(req.params.id)
+        }
+      })
+      .then(result => 
+        res.redirect('/tasks')
+      )
+      .catch(err => {
+        res.status(400)
+        res.send("There was a problem deleting the task")
+      })
+});
+
 module.exports = router;

@@ -22,7 +22,12 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER
       },
-      ListName: DataTypes.STRING
+      ListName: 
+      {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false
+      },
     }, {
     sequelize,
     modelName: 'lists',

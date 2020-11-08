@@ -16,11 +16,11 @@ router.get("/", (req, res, next) => {
 });
 
 /* Find list by ID */
-router.get("/:id", (req, res) => {
+router.get("/lists/:id", (req, res) => {
   models.lists
     .findOne({
       where: {
-        id: parseInt(req.params.id),
+        listId: parseInt(req.params.id),
         // ownedBy: user.id,
       },
     })
@@ -34,5 +34,17 @@ router.get("/:id", (req, res) => {
     });
 });
 
+/* create a list */
+router.post("/create", function (req, res) {
+  models.lists.create(req.body)
+  .then(newList => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(newList))
+  })
+  .catch(err => {
+    res.status(400);
+    res.send("That list already exists!");
+  });
+});
 
 module.exports = router;
