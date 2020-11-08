@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var models = require("../models");
 var authService = require('../services/auth');
+
 /* GET tasks. WIP */
 router.get("/", (req, res, next) => {
   models.tasks
@@ -34,8 +35,8 @@ router.get("/:id", (req, res) => {
 });
 
 /* Post new task */
-router.post ('/add', (req, res) =>{
-  let token =req.cookies.token;
+router.post('/add', (req, res) =>{
+  let token = req.cookies.token;
   authService.verifyUser(token).then(user => {
     if(user == null){
       return res.json({message: "User not logged on."})

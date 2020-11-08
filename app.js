@@ -11,7 +11,6 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var tasksRouter = require('./routes/tasks');
 var listsRouter = require('./routes/lists');
-var ideasRouter = require('/routes/ideas');
 
 var app = express();
 
@@ -28,7 +27,6 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/tasks', tasksRouter);
 app.use('/lists', listsRouter);
-app.use('/ideas', ideasRouter);
 
 models.sequelize.sync().then(function () {
     console.log("DB Sync'd")
