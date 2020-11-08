@@ -41,8 +41,9 @@ router.post('/add', (req, res) =>{
     if(user == null){
       return res.json({message: "User not logged on."})
     }
-    models.taks.create({...req.body, ownedBy: user.id}).then(newTask =>{
+    models.tasks.create({...req.body, ownedBy: user.id}).then(newTask =>{
       res.json({task: newTask});
+      console.log(newTask)
 
     }).catch(err => {
       res.status(400);
