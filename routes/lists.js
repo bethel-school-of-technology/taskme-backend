@@ -36,14 +36,24 @@ router.get("/lists/:id", (req, res) => {
 
 /* create a list */
 router.post("/create", function (req, res) {
-  models.lists.create(req.body)
-  .then(newList => {
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify(newList))
-  })
-  .catch(err => {
-    res.status(400);
-    res.send("That list already exists!");
+  let token = req.cookies.token;
+  authService.verifyUser(token).then((user) => {
+    if (user == null) {
+      return res.json({ message: "User not logged on." });
+    }
+    models.lists
+      .create(req.body)
+      .then((newList) => {
+        res.setHeader("Content-Type", "application/json");
+        res.json({ list: newList, status: 200 });
+      })
+      .catch((err) => {
+        res.json({
+          message: "That list already exists!",
+          error: err,
+          status: 400,
+        });
+      });
   });
 });
 
