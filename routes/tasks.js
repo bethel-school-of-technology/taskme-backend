@@ -12,7 +12,7 @@ router.get("/", (req, res, next) => {
     }
     models.tasks
       .findAll({
-        where: { ownedBy: user.UserId },
+        where: { UserId: user.UserId },
         attributes: ["TaskId", "TaskName", "Completed"],
       })
       .then((tasksFound) => {
@@ -33,7 +33,7 @@ router.get("/:id", (req, res) => {
       .findOne({
         where: {
           TaskId: parseInt(req.params.id),
-          ownedBy: user.UserId,
+          UserId: user.UserId,
         },
       })
       .catch((err) => {
@@ -52,7 +52,7 @@ router.post('/add', (req, res) =>{
     if(user == null){
       return res.json({message: "User not logged on."})
     }
-    models.tasks.create({...req.body, ownedBy: user.id}).then(newTask =>{
+    models.tasks.create({...req.body, UserId: user.UserId}).then(newTask =>{
       res.json({task: newTask});
       console.log(newTask)
 
@@ -74,7 +74,7 @@ router.put("/:id", (req, res) => {
       .update(req.body, {
         where: {
           TaskId: parseInt(req.params.id),
-          ownedBy: user.UserId,
+          UserId: user.UserId,
         },
       })
       .catch((err) => {
@@ -99,7 +99,7 @@ router.delete("/:id", (req, res) => {
       .destroy({
         where: {
           TaskId: parseInt(req.params.id),
-          ownedBy: user.UserId,
+          UserId: user.UserId,
         },
       })
       .then((result) => res.redirect("/tasks"))

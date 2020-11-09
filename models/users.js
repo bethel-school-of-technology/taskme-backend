@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class users extends Model {
     /**
@@ -11,38 +9,41 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-       users.hasMany(models.tasks, { foreignKey: "ownedBy", as: "tasks" });
+      users.hasMany(models.tasks, { foreignKey: "UserId" });
     }
-  };
-  users.init({
-    UserId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true
+  }
+  users.init(
+    {
+      UserId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      FirstName: DataTypes.STRING,
+      LastName: DataTypes.STRING,
+      Email: {
+        type: DataTypes.STRING,
+        unique: true,
+      },
+      Username: {
+        type: DataTypes.STRING,
+        unique: true,
+      },
+      Password: DataTypes.STRING,
+      Deleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      Admin: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
     },
-    FirstName: DataTypes.STRING,
-    LastName: DataTypes.STRING,
-    Email: {
-      type: DataTypes.STRING,
-      unique: true
-    },
-    Username: {
-      type: DataTypes.STRING,
-      unique: true
-    },
-    Password: DataTypes.STRING,
-    Deleted: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
-    },
-    Admin: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
-    },
-  }, {
-    sequelize,
-    modelName: 'users',
-  });
+    {
+      sequelize,
+      modelName: "users",
+    }
+  );
   return users;
 };
